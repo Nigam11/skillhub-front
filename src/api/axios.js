@@ -12,7 +12,7 @@ instance.interceptors.request.use((config) => {
 
   if (token && token !== "undefined") {
     config.headers["Authorization"] = `Bearer ${token}`;
-    console.log("🔐 Attaching token:", token); // DEBUG
+     // DEBUG
   } else {
     console.warn("⚠️ No token found in localStorage"); // DEBUG
   }
