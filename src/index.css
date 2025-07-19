@@ -1,36 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Knewave&display=swap');
 
 @import "tailwindcss";
+
 @tailwind utilities;
 
 
+body {
+  font-family: 'Rubik Storm', sans-serif;
+}
 
-/* Custom Animations */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
+
+/* Global Smooth Animation */
+@layer base {
+  * {
+    @apply transition-all duration-300 ease-in-out;
   }
-  to {
-    opacity: 1;
-    transform: scale(1);
+
+  body {
+    @apply font-sans bg-[#333333] text-white;
+  }
+
+  input,
+  textarea,
+  select {
+    @apply bg-white text-black rounded-md px-3 py-2;
+  }
+
+  button {
+    @apply transition duration-300 ease-in-out;
   }
 }
 
-@keyframes slide-down {
-  from {
-    transform: translateY(-10px);
-    opacity: 0;
+/* Custom Fade-in Animation */
+@layer utilities {
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
-  to {
-    transform: translateY(0);
-    opacity: 1;
+
+  .fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
   }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.3s ease-out forwards;
-}
-
-.animate-slide-down {
-  animation: slide-down 0.3s ease-out forwards;
 }

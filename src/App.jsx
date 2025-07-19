@@ -1,3 +1,4 @@
+// src/App.jsx
 import { useState, useEffect } from "react";
 import {
   Routes,
@@ -6,46 +7,67 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import api from "./api/axios";
+
 import Dashboard from "./pages/Dashboard";
 import SearchPage from "./pages/SearchPage";
-import ForgotPassword from "./pages/ForgotPassword";
+import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ProfilePage from "./pages/ProfilePage";
 import UserProfile from "./pages/UserProfile";
 import EditProfilePage from "./pages/EditProfilePage";
 import EditResourcePage from "./pages/EditResourcePage";
+import AboutUs from "./pages/AboutUs";
+
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import LoginModal from "./components/LoginModal";
 import SignupModal from "./components/SignupModal";
-import Footer from "./components/Footer";
-import AboutUs from "./pages/AboutUs";
-import axios from "axios";
+
+import backgroundImage from "./assets/images/COMO-HUNTER.jpg";
+import ScrollToTop from "./components/ScrollToTop";
 
 function AppWrapper() {
   const location = useLocation();
   const navigate = useNavigate();
+
+  const [user, setUser] = useState(() => {
+    try {
+      const savedUser = localStorage.getItem("user");
+      return savedUser && savedUser !== "undefined" ? JSON.parse(savedUser) : null;
+    } catch (err) {
+      localStorage.removeItem("user");
+      return null;
+    }
+  });
+
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
-  const [user, setUser] = useState(null);
   const [pendingResource, setPendingResource] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) return;
 
-    axios
-      .get("http://localhost:8080/api/users/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        setUser(res.data);
-        localStorage.setItem("user", JSON.stringify(res.data));
-      })
-      .catch(() => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        setUser(null);
-      });
+    if (token && token !== "undefined") {
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+      api
+        .get(`/api/users/me`)
+        .then((res) => {
+          setUser(res.data);
+          localStorage.setItem("user", JSON.stringify(res.data));
+        })
+        .catch((err) => {
+          console.error("Token expired or invalid:", err);
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          setUser(null);
+        });
+    } else {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      setUser(null);
+    }
   }, []);
 
   const handleLoginSuccess = (userData) => {
@@ -53,37 +75,52 @@ function AppWrapper() {
     setUser(userData);
     setShowLogin(false);
 
+    const token = localStorage.getItem("token");
+    if (token && token !== "undefined") {
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
+
     const redirectTo = localStorage.getItem("redirectTo");
+
     if (redirectTo) {
       localStorage.removeItem("redirectTo");
       navigate(redirectTo);
     } else if (pendingResource) {
-      const isOwner = pendingResource.owner || pendingResource.isOwner;
-      const target = isOwner ? "/profile" : `/user/${pendingResource.ownerId}`;
+      const ownerId = pendingResource.ownerId;
+      const isOwner = String(userData.id) === String(ownerId);
       setPendingResource(null);
-      navigate(target);
+      navigate(isOwner ? "/profile" : `/user/${ownerId}`);
     } else {
       navigate("/dashboard");
     }
   };
 
-  const handleConnectClick = (res) => {
-    if (!res) return;
-    const isOwner = res.owner || res.isOwner;
-    const target = isOwner ? "/profile" : `/user/${res.ownerId}`;
+  const handleConnectClick = async (ownerId) => {
     const token = localStorage.getItem("token");
 
-    if (!token) {
-      setPendingResource(res);
+    if (!token || token === "undefined") {
       setShowLogin(true);
-    } else {
-      navigate(target);
+      return;
+    }
+
+    try {
+      const res = await api.get(`/api/users/me`);
+      const currentUser = res.data;
+      const isOwner = parseInt(currentUser.id) === parseInt(ownerId);
+
+      if (isOwner) {
+        navigate("/profile");
+      } else {
+        navigate(`/user/${ownerId}`);
+      }
+    } catch (error) {
+      console.error("Error fetching user info", error);
     }
   };
 
   const handleSeeMoreClick = (keyword) => {
     const token = localStorage.getItem("token");
-    if (!token) {
+    if (!token || token === "undefined") {
       localStorage.setItem("redirectTo", `/search/${keyword}`);
       setShowLogin(true);
     } else {
@@ -92,13 +129,23 @@ function AppWrapper() {
   };
 
   return (
-    <>
+    <div
+      className="min-h-screen flex flex-col pt-20"
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
+    >
       <Navbar
         onLogin={() => setShowLogin(true)}
         onSignup={() => setShowSignup(true)}
         user={user}
         setUser={setUser}
       />
+
+      <ScrollToTop />
 
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
@@ -216,7 +263,7 @@ function AppWrapper() {
       )}
 
       <Footer />
-    </>
+    </div>
   );
 }
 

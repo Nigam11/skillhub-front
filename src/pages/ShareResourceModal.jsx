@@ -1,3 +1,4 @@
+// src/components/ShareResourceModal.jsx
 import { useState } from "react";
 import axios from "axios";
 
@@ -56,15 +57,15 @@ const ShareResourceModal = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex justify-center items-center animate-fade-in">
-      <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-xl relative">
+      <div className="bg-white/20 backdrop-blur-xl border border-white/30 p-6 rounded-2xl shadow-2xl w-full max-w-xl relative text-white">
         <button
           onClick={onClose}
-          className="absolute top-3 right-4 text-gray-500 hover:text-black text-xl"
+          className="absolute top-3 right-4 text-white hover:text-red-300 text-xl"
         >
           ✖
         </button>
 
-        <h2 className="text-2xl font-bold mb-4 text-center text-blue-700">Share a Resource</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center text-orange-300">Share  Resource</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -74,7 +75,7 @@ const ShareResourceModal = ({ onClose }) => {
             value={form.title}
             onChange={handleChange}
             required
-            className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-blue-500"
+            className="w-full border border-white/30 bg-transparent px-4 py-2 rounded focus:outline-none placeholder:text-white/70 text-white"
           />
           <textarea
             name="description"
@@ -82,7 +83,7 @@ const ShareResourceModal = ({ onClose }) => {
             value={form.description}
             onChange={handleChange}
             required
-            className="w-full border border-gray-300 px-4 py-2 rounded resize-none focus:outline-blue-500"
+            className="w-full border border-white/30 bg-transparent px-4 py-2 rounded resize-none focus:outline-none placeholder:text-white/70 text-white"
           />
           <input
             type="text"
@@ -91,7 +92,7 @@ const ShareResourceModal = ({ onClose }) => {
             value={form.platform}
             onChange={handleChange}
             required
-            className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-blue-500"
+            className="w-full border border-white/30 bg-transparent px-4 py-2 rounded focus:outline-none placeholder:text-white/70 text-white"
           />
           <input
             type="number"
@@ -100,7 +101,7 @@ const ShareResourceModal = ({ onClose }) => {
             value={form.price}
             onChange={handleChange}
             required
-            className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-blue-500"
+            className="w-full border border-white/30 bg-transparent px-4 py-2 rounded focus:outline-none placeholder:text-white/70 text-white"
           />
           <input
             type="url"
@@ -109,13 +110,13 @@ const ShareResourceModal = ({ onClose }) => {
             value={form.courseLink}
             onChange={handleChange}
             required
-            className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-blue-500"
+            className="w-full border border-white/30 bg-transparent px-4 py-2 rounded focus:outline-none placeholder:text-white/70 text-white"
           />
           <input
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-blue-500"
+            className="w-full border border-white/30 bg-transparent px-4 py-2 rounded focus:outline-none text-white file:text-white/70 file:bg-transparent"
           />
 
           <button
@@ -128,7 +129,7 @@ const ShareResourceModal = ({ onClose }) => {
         </form>
 
         {message && (
-          <p className="mt-4 text-center text-sm text-gray-700">{message}</p>
+          <p className="mt-4 text-center text-sm text-white/80">{message}</p>
         )}
       </div>
     </div>

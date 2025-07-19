@@ -10,6 +10,8 @@ const SignupModal = ({ onClose, openLogin }) => {
     email: "",
     password: "",
     confirmPassword: "",
+    gender: "",
+    whatsapp: "",
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -31,6 +33,8 @@ const SignupModal = ({ onClose, openLogin }) => {
         name: form.name,
         email: form.email,
         password: form.password,
+        gender: form.gender,
+        whatsapp: form.whatsapp,
       });
 
       setSuccess(true);
@@ -45,7 +49,7 @@ const SignupModal = ({ onClose, openLogin }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm transition-all">
-      <div className="bg-white text-black rounded-xl shadow-2xl p-6 w-full max-w-md relative animate-fade-in animate-slide-up scale-95">
+      <div className="bg-white text-black rounded-xl shadow-2xl p-8 w-full max-w-xl relative animate-fade-in animate-slide-up scale-95">
         <button
           onClick={onClose}
           className="absolute top-2 right-3 text-gray-500 hover:text-black text-lg transition-transform hover:scale-110"
@@ -81,6 +85,36 @@ const SignupModal = ({ onClose, openLogin }) => {
               name="email"
               value={form.email}
               onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+            <select
+              name="gender"
+              value={form.gender}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            >
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp Number</label>
+            <input
+              type="tel"
+              name="whatsapp"
+              value={form.whatsapp}
+              onChange={handleChange}
+              pattern="[0-9]{10,13}"
+              placeholder="e.g. 9876543210"
               required
               className="w-full border border-gray-300 rounded px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             />

@@ -52,72 +52,72 @@ const EditResourcePage = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p className="text-gray-500 animate-pulse text-lg">Loading resource...</p>
+        <p className="text-gray-300 animate-pulse text-lg">Loading resource...</p>
       </div>
     );
   }
 
   if (!resource) {
-    return <p className="text-center text-gray-500">Resource not found.</p>;
+    return <p className="text-center text-gray-400">Resource not found.</p>;
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white mt-10 rounded shadow-md animate-fade-in">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800">Edit Resource</h2>
+    <div className="max-w-2xl mx-auto p-6 mt-10 rounded-xl border border-white bg-white/5 backdrop-blur-md shadow-lg animate-fade-in">
+      <h2 className="text-2xl font-bold mb-4 text-white">Edit Resource</h2>
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Title</label>
+          <label className="block text-sm font-medium text-white">Title</label>
           <input
             type="text"
             name="title"
             value={resource.title}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
+            className="w-full px-4 py-2 border border-white/40 bg-transparent rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Description</label>
+          <label className="block text-sm font-medium text-white">Description</label>
           <textarea
             name="description"
             value={resource.description}
             onChange={handleChange}
             rows="3"
-            className="w-full px-4 py-2 border rounded"
+            className="w-full px-4 py-2 border border-white/40 bg-transparent rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Platform</label>
+          <label className="block text-sm font-medium text-white">Platform</label>
           <input
             type="text"
             name="platform"
             value={resource.platform}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
+            className="w-full px-4 py-2 border border-white/40 bg-transparent rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Price</label>
+          <label className="block text-sm font-medium text-white">Price</label>
           <input
             type="number"
             name="price"
             value={resource.price}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
+            className="w-full px-4 py-2 border border-white/40 bg-transparent rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Course Link</label>
+          <label className="block text-sm font-medium text-white">Course Link</label>
           <input
             type="text"
             name="courseLink"
             value={resource.courseLink}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
+            className="w-full px-4 py-2 border border-white/40 bg-transparent rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 

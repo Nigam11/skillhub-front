@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import defaultAvatar from "../assets/images/default-avatar.png";
 
 const API_BASE_URL = "http://localhost:8080";
 
 const EditProfilePage = () => {
-  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
     whatsapp: "",
@@ -30,7 +28,10 @@ const EditProfilePage = () => {
       })
       .then((res) => {
         setForm(res.data);
-        setPreviewUrl(res.data.profilePic || defaultAvatar);
+        const imageUrl = res.data.profilePic
+          ? `${API_BASE_URL}${res.data.profilePic}`
+          : defaultAvatar;
+        setPreviewUrl(imageUrl);
       })
       .catch((err) => {
         console.error("Failed to load profile:", err);
@@ -63,7 +64,8 @@ const EditProfilePage = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      navigate("/profile");
+
+      window.location.href = "/profile";
     } catch (error) {
       console.error("Failed to update profile:", error);
     } finally {
@@ -72,20 +74,22 @@ const EditProfilePage = () => {
   };
 
   const handleCancel = () => {
-    navigate("/profile");
+    window.location.href = "/profile";
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white px-4 py-8">
-      <div className="max-w-xl mx-auto bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-        <h2 className="text-2xl font-semibold mb-6 text-center">Edit Profile</h2>
+    <div className="flex flex-col min-h-screen px-4 py-10">
+      <div className="max-w-xl mx-auto bg-white/20 dark:bg-white/10 backdrop-blur-lg border border-white/30 shadow-2xl rounded-xl p-6 animate-fade-in animate-slide-up transition-all duration-300">
+        <h2 className="text-3xl font-bold mb-6 text-center text-blue-700 dark:text-blue-300">
+           Edit Profile
+        </h2>
 
         <div className="flex justify-center mb-6">
-          <label htmlFor="profile-pic" className="cursor-pointer">
+          <label htmlFor="profile-pic" className="cursor-pointer group">
             <img
               src={previewUrl || defaultAvatar}
               alt="Profile"
-              className="w-32 h-32 rounded-full object-cover border-2 border-gray-300 hover:opacity-90"
+              className="w-32 h-32 rounded-full object-cover border-4 border-white/70 shadow-lg group-hover:opacity-80 transition duration-300"
             />
             <input
               type="file"
@@ -104,7 +108,7 @@ const EditProfilePage = () => {
             value={form.name}
             onChange={handleChange}
             placeholder="Name"
-            className="w-full p-2 border border-gray-300 rounded bg-gray-50 dark:bg-gray-700"
+            className="w-full px-4 py-2 bg-white/70 dark:bg-gray-700 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
           />
           <input
             type="text"
@@ -112,13 +116,13 @@ const EditProfilePage = () => {
             value={form.bio}
             onChange={handleChange}
             placeholder="Bio"
-            className="w-full p-2 border border-gray-300 rounded bg-gray-50 dark:bg-gray-700"
+            className="w-full px-4 py-2 bg-white/70 dark:bg-gray-700 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
           />
           <select
             name="gender"
             value={form.gender}
             onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded bg-gray-50 dark:bg-gray-700"
+            className="w-full px-4 py-2 bg-white/70 dark:bg-gray-700 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
           >
             <option value="">Select Gender</option>
             <option value="MALE">Male</option>
@@ -131,7 +135,7 @@ const EditProfilePage = () => {
             value={form.whatsapp}
             onChange={handleChange}
             placeholder="WhatsApp Number"
-            className="w-full p-2 border border-gray-300 rounded bg-gray-50 dark:bg-gray-700"
+            className="w-full px-4 py-2 bg-white/70 dark:bg-gray-700 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
           />
           <input
             type="text"
@@ -139,21 +143,25 @@ const EditProfilePage = () => {
             value={form.instagram}
             onChange={handleChange}
             placeholder="Instagram Handle"
-            className="w-full p-2 border border-gray-300 rounded bg-gray-50 dark:bg-gray-700"
+            className="w-full px-4 py-2 bg-white/70 dark:bg-gray-700 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
           />
         </div>
 
         <div className="flex justify-end mt-6 space-x-4">
           <button
             onClick={handleCancel}
-            className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+            className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500 transition"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
             disabled={loading}
-            className={`px-4 py-2 rounded text-white ${loading ? "bg-blue-300" : "bg-blue-600 hover:bg-blue-700"}`}
+            className={`px-4 py-2 rounded text-white transition ${
+              loading
+                ? "bg-blue-300 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
+            }`}
           >
             {loading ? "Saving..." : "Save Changes"}
           </button>

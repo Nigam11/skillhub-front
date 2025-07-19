@@ -1,15 +1,13 @@
-// src/pages/ForgotPassword.jsx
+// src/components/ForgotPassword.jsx
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = "http://localhost:8080";
 
-const ForgotPassword = () => {
+const ForgotPassword = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,12 +16,10 @@ const ForgotPassword = () => {
 
     try {
       await axios.post(`${API_BASE_URL}/api/reset-password/request`, { email });
-
       setStatus("success");
 
-      // ✅ Redirect to login after 2.5 seconds
       setTimeout(() => {
-        navigate("/");
+        onClose(); // close modal after 2.5 sec
       }, 2500);
     } catch (error) {
       console.error("Reset error:", error);
@@ -38,20 +34,20 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm transition-all">
-      <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md relative animate-fade-in animate-slide-up scale-95 border border-gray-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+      <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md relative animate-fade-in scale-95 border border-gray-200">
         <button
-          onClick={() => navigate("/")}
+          onClick={onClose}
           className="absolute top-2 right-3 text-gray-500 hover:text-gray-800 text-lg transition-transform hover:scale-110"
         >
           ❌
         </button>
 
         <h2 className="text-2xl font-bold text-center mb-4 text-blue-800">
-          🔐 Forgot Password
+           Forgot Password
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4 animate-fade-in">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Registered Email
@@ -79,19 +75,17 @@ const ForgotPassword = () => {
           </button>
 
           {status === "success" && (
-            <p className="text-green-600 text-sm text-center mt-2 animate-fade-in">
-              ✅ Reset link sent! Redirecting to login...
+            <p className="text-green-600 text-sm text-center mt-2">
+              ✅ Reset link sent! Closing...
             </p>
           )}
-
           {status === "user-not-found" && (
-            <p className="text-red-600 text-sm text-center mt-2 animate-fade-in">
+            <p className="text-red-600 text-sm text-center mt-2">
               ❌ No user found with this email.
             </p>
           )}
-
           {status === "error" && (
-            <p className="text-red-600 text-sm text-center mt-2 animate-fade-in">
+            <p className="text-red-600 text-sm text-center mt-2">
               ❌ Something went wrong. Try again later.
             </p>
           )}

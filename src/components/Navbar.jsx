@@ -1,9 +1,8 @@
-// src/components/Navbar.jsx
+// [No changes in imports]
 import { Link, useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
 import { Menu } from "lucide-react";
 import defaultAvatar from "../assets/images/default-avatar.png";
-import skillhubLogo from "../assets/images/skillhublogo.png";
 import ShareResourceModal from "../pages/ShareResourceModal";
 import LoginModal from "./LoginModal";
 import { useTranslation } from "react-i18next";
@@ -14,6 +13,7 @@ const Navbar = ({ onLogin, onSignup, user, setUser }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const { i18n, t } = useTranslation();
@@ -49,6 +49,14 @@ const Navbar = ({ onLogin, onSignup, user, setUser }) => {
     }
   }, [user, setUser]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
   const changeLanguage = (lang) => i18n.changeLanguage(lang);
@@ -76,18 +84,28 @@ const Navbar = ({ onLogin, onSignup, user, setUser }) => {
 
   return (
     <>
-      <nav className="bg-white shadow-md sticky top-0 z-50 transition-all duration-300">
+      <nav
+        className={`fixed w-full top-0 z-50 transition-all duration-500 ease-in-out capitalize 
+        ${scrolled
+          ? "bg-black/60 shadow-xl border-b border-white/20"
+          : "bg-transparent md:bg-white/10 border-b border-transparent"
+        } backdrop-blur-lg`}
+      >
         <div className="relative max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/dashboard" className="flex items-center space-x-2 transition-transform hover:scale-105">
-            <img src={skillhubLogo} alt="SkillHub Logo" className="w-8 h-8" />
-            <span className="text-2xl font-bold text-gray-800">SkillHub</span>
+          <Link
+            to="/dashboard"
+            className="flex items-center space-x-2 transition-transform hover:scale-105"
+          >
+            <span className="text-2xl text-orange-500 font-rubikStorm">
+              SKILLHUB
+            </span>
           </Link>
 
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden md:flex items-center space-x-6 text-orange-500">
             <select
               value={i18n.language}
               onChange={(e) => changeLanguage(e.target.value)}
-              className="text-sm border px-2 py-1 rounded transition duration-300 hover:border-blue-400"
+              className="text-sm border border-white text-white px-2 py-1 rounded bg-transparent hover:border-blue-400"
             >
               <option value="en">English</option>
               <option value="hi">हिन्दी</option>
@@ -95,27 +113,21 @@ const Navbar = ({ onLogin, onSignup, user, setUser }) => {
               <option value="es">Español</option>
             </select>
 
-            <button
-              onClick={handleShareClick}
-              className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
-            >
-              {t("shareResource")}
+            <button onClick={handleShareClick} className="transition-colors duration-200">
+              {t("ShareResource")}
             </button>
 
-            <a href="#help" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
-              {t("help")}
+            <a href="#help" className="transition-colors duration-200">
+              {t("Help")}
             </a>
 
-            <Link to="/about" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
-              {t("about")}
+            <Link to="/about" className="transition-colors duration-200">
+              {t("About")}
             </Link>
 
             {!user ? (
               <>
-                <button
-                  onClick={onLogin}
-                  className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
-                >
+                <button onClick={onLogin} className="transition-colors duration-200">
                   {t("login")}
                 </button>
                 <button
@@ -135,17 +147,17 @@ const Navbar = ({ onLogin, onSignup, user, setUser }) => {
                   onClick={toggleDropdown}
                 />
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-md z-50 animate-fade-in origin-top-right transition-opacity duration-300">
+                  <div className="absolute right-0 mt-2 w-48 bg-white/30 backdrop-blur-lg border rounded-lg shadow-md z-50 animate-fade-in origin-top-right transition-opacity duration-300">
                     <Link
                       to="/profile"
                       onClick={() => setIsDropdownOpen(false)}
-                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+                      className="block px-4 py-2 text-orange-500 hover:bg-orange-100 transition"
                     >
                       {t("myAccount")}
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 transition"
+                      className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-100 transition"
                     >
                       {t("logout")}
                     </button>
@@ -156,74 +168,83 @@ const Navbar = ({ onLogin, onSignup, user, setUser }) => {
           </div>
 
           <button onClick={toggleMobileMenu} className="md:hidden z-50 transition-transform hover:scale-110">
-            <Menu className="w-6 h-6 text-gray-700" />
+            <Menu className="w-6 h-6 text-orange-500" />
           </button>
         </div>
 
         {isMobileMenuOpen && (
           <div
             ref={mobileMenuRef}
-            className="absolute top-full left-0 w-full bg-white shadow-md z-40 px-4 py-4 md:hidden space-y-2 animate-slide-down transition-all duration-300"
+            className="absolute top-full left-0 w-full bg-cover bg-center bg-no-repeat backdrop-blur-md shadow-lg z-40 md:hidden animate-slide-down transition-all duration-300 text-orange-500"
+            style={{
+              backgroundImage: `url('/assets/images/universal-bg.jpg')`,
+              backgroundColor: "rgba(0, 0, 0, 0.6)",
+            }}
           >
-            {user && (
-              <Link
-                to="/profile"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-gray-700 hover:text-blue-600 transition"
-              >
-                {t("myAccount")}
-              </Link>
-            )}
-
-            <button
-              onClick={() => {
-                handleShareClick();
-                setIsMobileMenuOpen(false);
-              }}
-              className="block text-gray-700 hover:text-blue-600 transition"
-            >
-              {t("shareResource")}
-            </button>
-
-            <Link
-              to="/about"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block text-gray-700 hover:text-blue-600 transition"
-            >
-              {t("about")}
-            </Link>
-
-            <a
-              href="#help"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block text-gray-700 hover:text-blue-600 transition"
-            >
-              {t("help")}
-            </a>
-
-            {!user ? (
-              <>
-                <button
-                  onClick={onLogin}
-                  className="block w-full text-left text-gray-700 hover:text-blue-600 transition"
+            <div className="max-w-6xl mx-auto px-4 py-4 space-y-2">
+              {user && (
+                <Link
+                  to="/profile"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block hover:text-orange-600 transition"
                 >
-                  {t("login")}
-                </button>
-                <button
-                  onClick={onSignup}
-                  className="w-full text-left px-4 py-1 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-200 text-sm"
-                >
-                  {t("signup")}
-                </button>
-              </>
-            ) : (
+                  {t("MyAccount")}
+                </Link>
+              )}
+
               <button
-                onClick={handleLogout}
-                className="block w-full text-left text-red-600 hover:text-red-800 transition"
+                onClick={() => {
+                  handleShareClick();
+                  setIsMobileMenuOpen(false);
+                }}
+                className="block hover:text-orange-600 transition"
               >
-                {t("logout")}
+                {t("ShareResource")}
               </button>
-            )}
+
+              <Link
+                to="/about"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block hover:text-orange-600 transition"
+              >
+                {t("About")}
+              </Link>
+
+              <a
+                href="#help"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block hover:text-orange-600 transition"
+              >
+                {t("Help")}
+              </a>
+
+              {!user ? (
+                <>
+                  <button
+                    onClick={onLogin}
+                    className="block w-full text-left hover:text-orange-600 transition"
+                  >
+                    {t("login")}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      onSignup(); // ✅ Added this
+                    }}
+                    className="w-full text-left px-4 py-1 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-200 text-sm"
+                  >
+                    {t("signup")}
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={handleLogout}
+                  className="block w-full text-left text-red-600 hover:text-red-800 transition"
+                >
+                  {t("logout")}
+                </button>
+              )}
+            </div>
           </div>
         )}
       </nav>
