@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "https://skillhub-backend.up.railway.app"; // ✅ LIVE backend URL
+const API_BASE_URL = "https://skillhub-server-7zdi.onrender.com";// ✅ LIVE backend URL
 
 const instance = axios.create({
   baseURL: API_BASE_URL,
