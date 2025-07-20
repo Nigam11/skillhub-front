@@ -96,7 +96,7 @@ const Navbar = ({ onLogin, onSignup, user, setUser }) => {
             to="/dashboard"
             className="flex items-center space-x-2 transition-transform hover:scale-105"
           >
-            <span className="text-2xl text-orange-500 font-rubikStorm">
+            <span className="text-2xl text-orange-500 font-rubikStorm"style={{ fontFamily: '"Rubik Storm", system-ui' }}>
               SKILLHUB
             </span>
           </Link>

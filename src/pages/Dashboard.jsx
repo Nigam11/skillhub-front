@@ -183,13 +183,13 @@ const Dashboard = ({ onSeeMore, onLoginSuccess }) => {
       <div className="flex-grow">
         <div className="py-10 px-4 max-w-6xl mx-auto animate-fade-in">
           {user && (
-            <h2 className="text-2xl mb-4 text-center md:text-left text-orange-400" style={{ fontFamily: '"Rubik Storm", system-ui' }}>
+            <h2 className="text-2xl mb-4 text-center md:text-left text-orange-400" >
               Welcome back, {user.name}
             </h2>
           )}
           <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg flex flex-col md:flex-row items-center justify-between shadow-sm animate-slide-down">
             <div className="max-w-md text-center md:text-left">
-              <h3 className="text-2xl mb-2 text-orange-400" style={{ fontFamily: '"Rubik Storm", system-ui' }}>
+              <h3 className="text-2xl mb-2 text-orange-400" >
                 Access curated learning resources shared by real users
               </h3>
               <p className="text-white/80 mb-3 text-sm">
@@ -198,7 +198,7 @@ const Dashboard = ({ onSeeMore, onLoginSuccess }) => {
               <button
                 className="px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 transition-transform transform hover:scale-105"
                 onClick={() => searchRef.current?.scrollIntoView({ behavior: "smooth" })}
-                style={{ fontFamily: '"Rubik Storm", system-ui' }}
+                
               >
                 Start Exploring
               </button>
@@ -239,7 +239,7 @@ const Dashboard = ({ onSeeMore, onLoginSuccess }) => {
           </form>
 
           <div className="mt-10">
-            <h2 className="text-2xl text-orange-400" style={{ fontFamily: '"Rubik Storm", system-ui' }}>
+            <h2 className="text-2xl text-orange-400" >
               Let's start learning
             </h2>
           </div>
