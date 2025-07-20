@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = "https://skillhub-backend.up.railway.app"; // ✅ LIVE backend URL
 
 const instance = axios.create({
   baseURL: API_BASE_URL,
@@ -12,9 +12,8 @@ instance.interceptors.request.use((config) => {
 
   if (token && token !== "undefined") {
     config.headers["Authorization"] = `Bearer ${token}`;
-     // DEBUG
   } else {
-    console.warn("⚠️ No token found in localStorage"); // DEBUG
+    console.warn("⚠️ No token found in localStorage");
   }
 
   return config;
